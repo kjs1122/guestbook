@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this :: content})}">
+
+    <th:block th:fragment="content">
+
+        <h1 class="mt-4" th:text="#{page.title.read}"></h1>
+
+        <div class="form-group">
+            <label for="#{dto.gno}" th:text="#{label.dto.gno}" ></label>
+            <input type="text" class="form-control" id="#{dto.gno}" th:field="${dto.gno}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="" th:text="#{label.dto.gno}"></label>
+            <input type="text" class="form-control" id="#{dto.gno}" th:field="${dto.gno}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="" th:text="#{label.dto.gno}"></label>
+            <input type="text" class="form-control" id="#{dto.gno}" th:field="${dto.gno}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="" th:text="#{label.dto.gno}"></label>
+            <input type="text" class="form-control" id="#{dto.gno}" th:field="${dto.gno}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="" th:text="#{label.dto.gno}"></label>
+            <input type="text" class="form-control" id="#{dto.gno}" th:field="${dto.gno}" readonly>
+        </div>
+
+
+    </th:block>
+
+</th:block>
+
+</html>

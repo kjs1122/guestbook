@@ -5,7 +5,15 @@
 
     <th:block th:fragment="content">
 
-        <h1 class="mt-4">GuestBook List Page</h1>
+        <h1 class="mt-4">[[#{page.title.list}]]
+            <span>
+                <a th:href="@{/guestbook/register}">
+                    <button type="button" class="btn btn-outline-primary"
+                            th:text="#{button.register}">
+                    </button>
+                </a>
+            </span>
+        </h1>
 
         <table class="table table-striped">
             <thead>
@@ -19,10 +27,14 @@
             <tbody>
 
             <tr th:each="dto : ${result.dtoList}">
-                <th scope="row">[[${dto.gno}]]</th>
-                <td>[[${dto.title}]]</td>
-                <td>[[${dto.writer}]]</td>
-                <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
+                <th scope="row">
+                    <a th:href="@{/guestbook/read(gno = ${dto.gno}, page = ${result.page})}"
+                       th:text="${dto.gno}">
+                    </a>
+                </th>
+                <td th:text="${dto.title}"></td>
+                <td th:text="${dto.writer}">[[${dto.writer}]]</td>
+                <td th:text="${#temporals.format(dto.regDate, 'yyyy/MM/dd')}"></td>
             </tr>
 
             </tbody>
@@ -41,8 +53,9 @@
             <li class="page-item" th:if="${result.next}">
                 <a class="page-link" th:href="@{/guestbook/list(page = ${result.end + 1})}">Next</a>
             </li>
-
         </ul>
+
+        <th:block th:replace="~{/modal/complete:: modal}"></th:block>
 
     </th:block>
 
