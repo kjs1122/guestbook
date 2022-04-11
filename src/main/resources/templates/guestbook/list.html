@@ -15,6 +15,31 @@
             </span>
         </h1>
 
+        <form action="/guestbook/list" th:object="${requestDTO}" method="get" id="searchForm">
+            <div class="input-group">
+                <input type="hidden" th:field="*{page}">
+                <div class="input-group-prepend">
+                    <select class="custom-select" name="type">
+                        <option th:selected="*{type == null}" th:text="#{option.null}"/>
+                        <option th:value="t" th:selected="*{type == 't'}" th:text="#{option.title}"/>
+                        <option th:value="c" th:selected="*{type == 'c'}" th:text="#{option.content}"/>
+                        <option th:value="w" th:selected="*{type == 'w'}" th:text="#{option.writer}"/>
+                        <option th:value="tc" th:selected="*{type == 'tc'}" th:text="#{option.title.content}"/>
+                        <option th:value="tcw" th:selected="*{type == 'tcw'}" th:text="#{option.title.content.writer}"/>
+                    </select>
+                </div>
+                <input class="form-control" th:field="*{keyword}">
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-outline-secondary btn-search"
+                            th:text="#{button.search}">
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-clear"
+                            th:text="#{button.clear}">
+                    </button>
+                </div>
+            </div>
+        </form>
+
         <table class="table table-striped">
             <thead>
             <tr>
@@ -28,7 +53,12 @@
 
             <tr th:each="dto : ${result.dtoList}">
                 <th scope="row">
-                    <a th:href="@{/guestbook/read(gno = ${dto.gno}, page = ${result.page})}"
+                    <a th:href="@{/guestbook/read(
+                    gno = ${dto.gno},
+                    page = ${result.page},
+                    type = ${requestDTO.type},
+                    keyword = ${requestDTO.keyword}
+                    )}"
                        th:text="${dto.gno}">
                     </a>
                 </th>
@@ -42,20 +72,55 @@
 
         <ul class="pagination h-100 justify-content-center align-items-center">
             <li class="page-item " th:if="${result.prev}">
-                <a class="page-link" th:href="@{/guestbook/list(page = ${result.start - 1})}" tabindex="-1">Previous</a>
+                <a class="page-link" th:href="@{/guestbook/list(
+                page = ${result.start - 1},
+                type = ${requestDTO.type},
+                keyword = ${requestDTO.keyword}
+                )}" tabindex="-1">Previous</a>
             </li>
 
             <li th:class="'page-item ' + ${result.page == page ? 'active' : ''}"
                 th:each="page : ${result.pageList}">
-                <a class="page-link" th:href="@{/guestbook/list(page = ${page})}">[[${page}]]</a>
+                <a class="page-link" th:href="@{/guestbook/list(
+                page = ${page},
+                type = ${requestDTO.type},
+                keyword = ${requestDTO.keyword}
+                )}">[[${page}]]</a>
             </li>
 
             <li class="page-item" th:if="${result.next}">
-                <a class="page-link" th:href="@{/guestbook/list(page = ${result.end + 1})}">Next</a>
+                <a class="page-link" th:href="@{/guestbook/list(
+                page = ${result.end + 1},
+                type = ${requestDTO.type},
+                keyword = ${requestDTO.keyword}
+                )}">Next</a>
             </li>
         </ul>
 
         <th:block th:replace="~{/modal/complete:: modal}"></th:block>
+
+        <script th:inline="javascript">
+
+            const searchForm = document.querySelector("#searchForm");
+            const btnSearch = document.querySelector(".btn-search");
+            const btnClear = document.querySelector(".btn-clear");
+
+            btnSearch.addEventListener("click", function () {
+                searchForm.submit();
+            });
+
+            btnClear.addEventListener("click", function () {
+                const typeTag = document.querySelector("select[name='type']");
+                const keywordTag = document.querySelector("input[name='keyword']");
+                const pageTag = document.querySelector("input[name='page']");
+
+                pageTag.remove();
+                typeTag.remove();
+                keywordTag.remove();
+                searchForm.submit();
+            });
+
+        </script>
 
     </th:block>
 

@@ -2,11 +2,8 @@ package org.zerock.guestbook.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +35,9 @@ public class GuestbookController {
      * 리스트로 이동
      */
     @GetMapping("/list")
-    public String list(PageRequestDTO pageRequestDTO, Model model) {
+    public String list(
+            @ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO,
+            Model model) {
 
         log.info("list........................ {}", pageRequestDTO);
 
@@ -81,7 +80,7 @@ public class GuestbookController {
     }
 
     /**
-     *  리스트로 이동
+     * 상세 글 보기
      */
     @GetMapping("/read")
     public String read(
@@ -94,5 +93,58 @@ public class GuestbookController {
         model.addAttribute("dto", guestbookService.read(gno));
 
         return "guestbook/read";
+    }
+
+    /**
+     * 수정 폼 이동
+     */
+    @GetMapping("/modify")
+    public String modify(
+            Long gno,
+            @ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO,
+            Model model) {
+
+        log.info("gno : {}", gno);
+
+        model.addAttribute("dto", guestbookService.read(gno));
+
+        return "guestbook/modify";
+    }
+    /**
+     * 게시글 수정
+     */
+    @PostMapping("/modify")
+    public String modifyPost(
+            GuestbookDTO dto,
+            @ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO,
+            RedirectAttributes redirectAttributes) {
+
+        log.info("post modify...............................");
+        log.info("dto : {}", dto);
+
+        guestbookService.modify(dto);
+
+        redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
+        redirectAttributes.addAttribute("type", pageRequestDTO.getType());
+        redirectAttributes.addAttribute("keyword",pageRequestDTO.getKeyword());
+        redirectAttributes.addAttribute("gno", dto.getGno());
+
+        return "redirect:/guestbook/list";
+    }
+    /**
+     * 게시글 삭제
+     */
+    @PostMapping("/remove")
+    public String remove(
+            Long gno,
+            RedirectAttributes redirectAttributes) {
+
+        log.info("gno : {}", gno);
+
+        guestbookService.remove(gno);
+
+        redirectAttributes.addFlashAttribute("msg", gno);
+
+        return "redirect:/guestbook/list";
     }
 }

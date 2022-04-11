@@ -45,4 +45,28 @@ class GuestbookServiceImplTest {
         }
 
     }
+
+    @Test
+    void testSearch() {
+
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .type("tc")
+                .keyword("한글")
+                .build();
+
+        PageResultDTO<GuestbookDTO, Guestbook> resultDTO = guestbookService.getList(pageRequestDTO);
+
+        System.out.println("resultDTO.isPrev() = " + resultDTO.isPrev());
+        System.out.println("resultDTO.isNext() = " + resultDTO.isNext());
+        System.out.println("resultDTO.getTotalPage() = " + resultDTO.getTotalPage());
+
+        System.out.println("=================================================");
+        for (GuestbookDTO guestbookDTO : resultDTO.getDtoList()) {
+            System.out.println("guestbookDTO = " + guestbookDTO);
+        }
+        System.out.println("=================================================");
+        resultDTO.getPageList().forEach(i -> System.out.println("i = " + i));
+    }
 }

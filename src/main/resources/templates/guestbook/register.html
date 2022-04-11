@@ -14,18 +14,18 @@
             </div>
 
             <div class="form-group">
-                <label for="title" th:text="#{label.dto.title}"></label>
-                <input type="text" class="form-control" id="title" th:field="*{title}" placeholder="Enter Title">
+                <label th:for="title" th:text="#{label.dto.title}"></label>
+                <input type="text" class="form-control" th:field="*{title}" placeholder="Enter Title">
                 <div th:errors="*{title}"></div>
             </div>
             <div class="form-group">
-                <label for="content" th:text="#{label.dto.content}"></label>
-                <textarea class="form-control" rows="5" id="content" th:field="*{content}"></textarea>
+                <label th:for="content" th:text="#{label.dto.content}"></label>
+                <textarea class="form-control" rows="5" th:field="*{content}"></textarea>
                 <div th:errors="*{content}"></div>
             </div>
-            <div class="form-group">
-                <label for="title" th:text="#{label.dto.writer}"></label>
-                <input type="text" class="form-control" id="writer" th:field="*{writer}" placeholder="Enter Writer">
+            <div class="th:form-group">
+                <label th:for="writer" th:text="#{label.dto.writer}"></label>
+                <input type="text" class="form-control" th:field="*{writer}" placeholder="Enter Writer">
                 <div th:errors="*{writer}"></div>
             </div>
 
